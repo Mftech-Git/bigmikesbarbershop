@@ -107,18 +107,23 @@
   /* ------- barber stripes ------- */
   .stripes{
     height: 14px;
-    background: repeating-linear-gradient( -55deg,
+    background-image: repeating-linear-gradient( -55deg,
       var(--ox) 0 16px,
       var(--cream) 16px 32px,
       var(--ink) 32px 48px,
       var(--cream) 48px 64px
     );
-    background-size: 200% 100%;
-    animation: barber 12s linear infinite;
+    animation: barber 22s linear infinite;
     border-top: 2px solid var(--ink);
     border-bottom: 2px solid var(--ink);
   }
-  @keyframes barber { from { background-position: 0 0; } to { background-position: 200% 0; } }
+  @keyframes barber {
+    from { background-position: 0 0; }
+    to   { background-position: -78.1px 0; }   /* 64px stripe period / cos(55deg) for seamless loop */
+  }
+  @media (prefers-reduced-motion: reduce){
+    .stripes{ animation: none; }
+  }
 
   /* ------- hero ------- */
   .hero{
@@ -157,17 +162,12 @@
     text-shadow: 3px 3px 0 var(--ink);
     margin: 4px 0 0;
   }
-  .hero .ampline{
-    display:flex; align-items:center; gap: 18px; margin: 8px auto 6px; max-width: 760px;
-    font-family:"Alfa Slab One", serif; color: var(--ink); font-size: clamp(22px, 3.4vw, 38px);
-  }
-  .hero .ampline .rule{ flex:1; height:2px; background: var(--ink); opacity:.35; }
-  .hero .ampline .amp{ font-family:"Crimson Pro",serif; font-style: italic; font-weight: 400; color: var(--ox); font-size: 1.4em; }
   .hero h2{
     font-family:"Anton",sans-serif;
     font-size: clamp(28px, 5.4vw, 64px);
     color: var(--ink);
     letter-spacing: .08em;
+    margin-top: 4px;
   }
   .hero p.tag{
     margin: 18px auto 0; max-width: 720px;
@@ -216,19 +216,25 @@
   @media (min-width: 1080px){ .pole{ display:block; } }
   .pole::before{
     content:""; position:absolute; inset:0;
-    background: repeating-linear-gradient( 45deg,
-      var(--ox) 0 18px,
-      #ffffff 18px 36px,
-      #1f5fb0 36px 54px,
-      #ffffff 54px 72px
+    background-image: repeating-linear-gradient( 135deg,
+      var(--ox) 0 14px,
+      #ffffff 14px 28px,
+      #1f5fb0 28px 42px,
+      #ffffff 42px 56px
     );
-    animation: pole-spin 4s linear infinite;
-    background-size: 100% 200%;
+    animation: pole-spin 4.5s linear infinite;
   }
-  .pole .cap{ position:absolute; left:-12px; right:-12px; height:18px; background:var(--brass); border:3px solid var(--ink); border-radius:4px; }
+  .pole .cap{ position:absolute; left:-12px; right:-12px; height:18px; background:var(--brass); border:3px solid var(--ink); border-radius:4px; z-index: 2; }
   .pole .cap.top{ top:-10px; }
   .pole .cap.bot{ bottom:-10px; }
-  @keyframes pole-spin{ from{ background-position: 0 0; } to{ background-position: 0 72px; } }
+  /* 56px stripe period at 45deg from horizontal = 56/sin(45) = 79.2px vertical loop */
+  @keyframes pole-spin{
+    from { background-position: 0 0; }
+    to   { background-position: 0 -79.2px; }
+  }
+  @media (prefers-reduced-motion: reduce){
+    .pole::before{ animation: none; }
+  }
 
   section{ padding: 80px 22px; position: relative; }
   .wrap{ max-width: 1200px; margin: 0 auto; }
@@ -527,12 +533,6 @@
 
       <h1>Big Mike&rsquo;s</h1>
 
-      <div class="ampline">
-        <span class="rule"></span>
-        <span class="amp">&amp;</span>
-        <span class="rule"></span>
-      </div>
-
       <h2>Barbershop</h2>
 
       <p class="tag">A real barbershop on East Broadway. Sharp cuts, hot towels, good conversation, and none of the salon nonsense. Walk in, sit down, get squared away.</p>
@@ -642,6 +642,13 @@
           <div>
             <span class="name">Kid&rsquo;s Cut</span>
             <span class="desc">Patient hands and a steady chair. A solid first-haircut shop.</span>
+          </div>
+          <a class="price" href="tel:+14802711942">Call</a>
+        </li>
+        <li>
+          <div>
+            <span class="name">Youth Cut</span>
+            <span class="desc">Tweens and teens. Same care, same sharp finish.</span>
           </div>
           <a class="price" href="tel:+14802711942">Call</a>
         </li>
